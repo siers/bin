@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+if [ -n "${set_date:-}" ]; then
+    date="$(date -d "$set_date")"
+    export GIT_AUTHOR_DATE="$date"
+    export GIT_COMMITTER_DATE="$date"
+    echo >&2 "# git is in: $date"
+fi
+
+exec "$(which -a git | grep -Ev '/(home|Users)' | head -n1)" "$@" "${args[@]}"

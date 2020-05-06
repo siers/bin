@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+for f in "$@"; do
+    run xdg-open "$f"
+done

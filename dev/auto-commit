@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -eu
+
+[ -e "$1" ] || bad=1
+([ "$#" == "1" ] || [ "$#" == "2" ]) || bad=1
+
+if [ -n "${bad+x}" ]; then
+    echo "./usage: $0 <dir>"
+    exit
+fi
+
+# if [ -d "$1" ]; then
+#     cd "$1"
+# else
+#     cd "$(dirname "$1")"
+# fi
+
+# shift
+
+if [ -z "$(git status --porcelain)" ] && [ "$#" != "1" ]; then
+    git status
+    exit
+fi
+
+git add "$1"
+diff="$(git diff --cached --stat | tail -n1)"
+msg="Autocommit on $(date +'%Y-%m-%d %H:%M:%S'): $diff"
+git commit -m "$(sed 's/  */ /g' <<< "$msg")" "$@"
+
+if [ -n "$diff" ]; then
+    false && ok "$diff" || :
+fi

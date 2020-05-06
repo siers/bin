@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+if uname | grep -qi darwin; then
+    exec "$(which -a tetris | grep -Ev '/(home|Users)' | head -n1)" "$@" "${args[@]}"
+else
+    size=16 urxvt -e "$(command -v vitetris || ls /run/current-system/sw/bin/tetris)"
+fi

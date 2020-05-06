@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+echo recordmydesktop `printf -- "--width %s --height %s -x %s -y %s" $(slop | tr -c '0-9' ' ')` $* | tee /dev/tty | sh

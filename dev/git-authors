@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+if [ -n "$emails" ]; then
+    format=": %an : %ae"
+else
+    format="%an"
+fi
+
+git log --format="$format" | sort | uniq -c | sort -nr

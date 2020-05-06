@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+out="$(rofi -dmenu < ~/log/drafts/clipboard)"
+if test -z "$paste"; then
+    echo -n "$out" | c
+else
+    xdotool type "$out"
+fi

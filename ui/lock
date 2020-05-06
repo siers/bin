@@ -1,0 +1,59 @@
+#!/usr/bin/env zsh
+
+# capture-face:
+#       http://sprunge.us/NGYJ
+# wait-while-idle.rb:
+#       https://gist.github.com/siers/raw/3b97d3f84347e8600985ce19bf5fb35b
+#       https://gist.githubusercontent.com/siers/3b97d3f84347e8600985ce19bf5fb35b/raw/3a228c90819f72b60e394f3becc377cc5ff1e0d0/wait-while-idle.rb
+
+# (xbindkey '(Mod4 combo)           "lock --stealth")
+# (xbindkey '(Mod4 another combo)   "touch /tmp/nolock; notify-send -t 1 ' '")
+
+locker() {
+    #$HOME/code/cache/i3lock-fancy/lock -- -dI 7
+    #$HOME/code/cache/i3lock-fancy/lock -- -I 7 "$@"
+    i3lock -I 7 -c '#555555' "$@"
+}
+
+check-unlocked() {
+    if ! [ -e "/tmp/nolock" ]; then
+        return
+    fi
+
+    rm /tmp/nolock
+    alert 0.3 'c octave'
+    date +'%c unlocked' > /tmp/lock-log
+    notify-send -t 1 'seasam!'
+    exit
+}
+
+stealth-lock() {
+    sleep 0.5
+    alert 0.3 g &
+    rm -f /tmp/nolock
+    notify-send -t 1 on
+    ~/code/gists/wait-while-idle/wait-while-idle.rb
+    sleep 3.5
+
+    check-unlocked
+
+    capture-face-video &
+    locker
+}
+
+usage() {
+    echo "usage: ./$0 [--stealth]"
+}
+
+if [ "$#" = "1" ]; then
+    if [ "$1" = "--stealth" ]; then
+        stealth-lock
+    else
+        usage
+    fi
+elif [ "$#" = "0" ]; then
+    notify-send -t 1 'l'
+    locker -d
+else
+    usage
+fi
