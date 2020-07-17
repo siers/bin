@@ -18,8 +18,8 @@ for file in "$@"; do
     fi
 
     if [ -e "$file" ]; then
-        mv -v "$file" "$stored"
+        mv -vi "$file" "$stored"
     else
-        mv -v "$stored" "$file"
+        mv -vi "$stored" "$file"
     fi
 done

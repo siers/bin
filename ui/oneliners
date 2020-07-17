@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-out="$(rofi -dmenu < ~/log/drafts/clipboard)"
+out="$((cat ~/log/drafts/clipboard; date "$(echo -e "+%F\n%T\n%F-%T")") | rofi -dmenu)"
 if test -z "$paste"; then
     echo -n "$out" | c
 else

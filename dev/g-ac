@@ -2,13 +2,13 @@
 
 set -eu
 
-[ -e "$1" ] || bad=1
-([ "$#" == "1" ] || [ "$#" == "2" ]) || bad=1
+# [ -e "$1" ] || bad=1
+# ([ "$#" == "1" ] || [ "$#" == "2" ]) || bad=1
 
-if [ -n "${bad+x}" ]; then
-    echo "./usage: $0 <dir>"
-    exit
-fi
+# if [ -n "${bad+x}" ]; then
+#     echo "./usage: $0 <dir>"
+#     exit
+# fi
 
 # if [ -d "$1" ]; then
 #     cd "$1"
@@ -23,9 +23,10 @@ if [ -z "$(git status --porcelain)" ] && [ "$#" != "1" ]; then
     exit
 fi
 
-git add "$1"
+git add "${@:-.}"
 diff="$(git diff --cached --stat | tail -n1)"
-msg="Autocommit on $(date +'%Y-%m-%d %H:%M:%S'): $diff"
+# msg="Autocommit on $(date +'%Y-%m-%d %H:%M:%S'): $diff"
+msg="WIP: $diff"
 git commit -m "$(sed 's/  */ /g' <<< "$msg")" "$@"
 
 if [ -n "$diff" ]; then

@@ -1,3 +1,4 @@
 #! /usr/bin/env sh
 
-exec run urxvt -e term specific "$(tmux display-message -p '#S')"
+group_name="$(tmux display-message -p '#{session_group}')"
+exec run urxvt -e term specific "$group_name"

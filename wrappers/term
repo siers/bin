@@ -52,9 +52,11 @@ tag="${tag:-$(tag)}"
 unset TMUX
 
 if [ "$1" = "in-tag" ] || [ "$1" = "specific" ]; then
-    if [ "$1" = "in-tag" ] || [ -n "$2" ]; then
+    if [ "$1" = "in-tag" ]; then
         shift
         name="${2:-pane-$tag}"
+    elif [ -n "$2" ]; then
+        name="$2"
     else
         name="$(possible-session-names)"
 
@@ -65,7 +67,7 @@ if [ "$1" = "in-tag" ] || [ "$1" = "specific" ]; then
     fi
 
     for env in $(find "$(tmux-env-dir)/" -maxdepth 1 \( -type f -o -type l \)); do
-        echo "$name" "$(basename "$env")" "$([ "$name" = "$(basename "$env")" ]; echo $?)" "$(tmux-session-exists "$name"; echo $?)"
+        # echo "$name" "$(basename "$env")" "$([ "$name" = "$(basename "$env")" ]; echo $?)" "$(tmux-session-exists "$name"; echo $?)"
         if [ "$name" = "$(basename "$env")" ] && ! tmux-session-exists "$name"; then
             vt -e tmux new-session -ds "$name" bash -c "tmux source $env"
         fi
